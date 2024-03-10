@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: ENV
+  name: SERVER_NAME
+spec:
+  selector:
+    matchLabels:
+      app: SERVER_NAME
+  replicas: REPLICAS
+  template:
+    metadata:
+      labels:
+        app: SERVER_NAME
+    spec:
+      imagePullSecrets: 
+      - name: harbor
+      containers:
+      - name: SERVER_NAME
+        image: IMAGE_ADDRESS
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        volumeMounts:
+        - name: config
+          mountPath: /go/config.yaml
+          subPath: config.yaml
+          readOnly: true
+        livenessProbe:
+          httpGet:
+            port: 8080
+            path: /health
+          initialDelaySeconds: 10
+          periodSeconds: 3
+      volumes:
+      - name: config
+        configMap:
+          name: CONFIG_NAME
+          items:
+          - key: config.yaml
+            path: config.yaml
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ENV
+  name: SERVER_NAME
+spec:
+  type: 
+  selector:
+    app: SERVER_NAME
+  ports:
+  - port: 8080
+    targetPort: 8080

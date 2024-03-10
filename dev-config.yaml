@@ -1,0 +1,36 @@
+serve:
+  name: base
+  port: 8080
+
+# mysql配置
+mysql:
+  default:
+    host: 
+    port: 
+    username: 
+    password: 
+    database: 
+    config: charset=utf8mb4&parseTime=True&loc=Local
+    maxidleconn: 10
+    maxopenconn: 100
+    connmaxlifetime: 60
+    debug: true
+
+redis:
+  default:
+    host:
+      - 
+    db: 1
+    password: 
+    mode: 1 # 1单机 2集群
+    readtimeout:
+    writetimeout: 60
+
+logger:
+  path: ./log
+  maxcount: 30
+  callerenable: true
+
+fileservice:
+  host: 127.0.0.1
+  port: 8081
